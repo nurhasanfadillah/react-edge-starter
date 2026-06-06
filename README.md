@@ -1,92 +1,96 @@
+<div align="center">
+
 # react-edge-starter
 
-> by [NURHASAN](https://github.com/nurhasanfadillah)
+**Production-ready React monorepo boilerplate.**
+Clone → isi `.env` → `pnpm dev` → langsung coding fitur bisnis.
 
-Monorepo boilerplate siap pakai untuk membangun aplikasi React dengan stack modern.
-Clone, isi `.env`, jalankan `pnpm dev` — langsung bisa coding fitur bisnis.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![pnpm](https://img.shields.io/badge/pnpm-workspace-orange)](https://pnpm.io)
+[![Turborepo](https://img.shields.io/badge/Turborepo-powered-EF4444)](https://turbo.build)
+[![Deploy on Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com)
+
+</div>
+
+---
 
 ## Stack
 
 | Layer | Tech |
 |-------|------|
-| Frontend | React 19 + Vite + TypeScript |
-| Routing | TanStack Router |
-| State | TanStack Query + Zustand |
-| UI | shadcn/ui (preset radix-mira) + Tailwind CSS v4 |
-| Backend | Hono.js (Vercel Edge Functions) |
-| Database | Drizzle ORM + Neon (PostgreSQL) |
-| Monorepo | Turborepo + pnpm workspaces |
-| Deploy | Vercel |
+| **Frontend** | React 19 · Vite · TypeScript |
+| **Routing** | TanStack Router (file-based, type-safe) |
+| **State** | TanStack Query · Zustand |
+| **UI** | shadcn/ui · Tailwind CSS v4 · dark mode |
+| **Backend** | Hono.js · Vercel Edge Functions |
+| **Database** | Drizzle ORM · Neon (PostgreSQL) |
+| **Env** | T3 Env · Zod |
+| **Monorepo** | Turborepo · pnpm workspaces |
+| **Deploy** | Vercel |
+
+---
 
 ## Struktur
 
 ```
 react-edge-starter/
 ├── apps/
-│   ├── web/          # React SPA (Vite)
-│   └── api/          # Hono API (Vercel Edge)
+│   ├── web/                  # React SPA (Vite)
+│   └── api/                  # Hono API (Vercel Edge)
+│       └── api/[[...route]].ts  # catch-all edge function
 ├── packages/
-│   ├── ui/           # shadcn/ui components
-│   ├── db/           # Drizzle schema + client
-│   ├── env/          # T3 Env + Zod validation
-│   └── config/       # ESLint, Prettier, TypeScript configs
-└── vercel.json       # Deployment config
+│   ├── ui/                   # shadcn/ui components
+│   ├── db/                   # Drizzle schema + client
+│   ├── env/                  # T3 Env + Zod schemas
+│   └── config/               # ESLint · Prettier · TypeScript
+├── .env.example
+├── turbo.json
+└── vercel.json
 ```
+
+---
 
 ## Quick Start
 
-**1. Clone dan install:**
 ```bash
-git clone <repo-url> my-app
+# 1. Clone
+git clone https://github.com/nurhasanfadillah/react-edge-starter.git my-app
 cd my-app
+
+# 2. Install
 pnpm install
-```
 
-**2. Setup environment:**
-```bash
+# 3. Setup env
 cp .env.example .env
-# Edit .env — isi DATABASE_URL dari Neon Console
-```
+# → isi DATABASE_URL dari https://console.neon.tech
 
-**3. Jalankan dev server:**
-```bash
+# 4. Dev
 pnpm dev
-# apps/web → http://localhost:5173
-# apps/api → http://localhost:3000/api/health
+# apps/web  → http://localhost:5173
+# apps/api  → http://localhost:3000/api/health
 ```
 
-## Menambah shadcn Component
+---
+
+## Panduan Penggunaan
+
+### Menambah shadcn Component
 
 ```bash
-# Dari root monorepo:
-npx shadcn add button
+# Dari root monorepo
 npx shadcn add card
 npx shadcn add input
+npx shadcn add dialog
 ```
 
-Komponen akan ditambahkan ke `packages/ui/src/components/ui/`.
-Export dari `packages/ui/src/index.ts` lalu import di apps/web:
+Komponen masuk ke `packages/ui/src/components/ui/`.
+Export di `packages/ui/src/index.ts`, lalu pakai di apps/web:
 
-```ts
-import { Button } from '@repo/ui'
+```tsx
+import { Button, Card } from '@repo/ui'
 ```
 
-## Database
-
-```bash
-# Generate migration dari schema:
-pnpm --filter @repo/db db:generate
-
-# Push schema ke database (dev):
-pnpm --filter @repo/db db:push
-
-# Buka Drizzle Studio:
-pnpm --filter @repo/db db:studio
-```
-
-Schema ada di `packages/db/src/schema/index.ts`.
-
-## Menambah API Route
+### Menambah API Route
 
 Edit `apps/api/src/index.ts`:
 
@@ -99,30 +103,64 @@ app.get('/users', async (c) => {
 })
 ```
 
+### Database
+
+```bash
+# Buat migration dari schema
+pnpm --filter @repo/db db:generate
+
+# Push ke database (dev, tanpa migration file)
+pnpm --filter @repo/db db:push
+
+# GUI Drizzle Studio
+pnpm --filter @repo/db db:studio
+```
+
+Schema ada di `packages/db/src/schema/index.ts` — tambah tabel di sini.
+
+### Dark Mode
+
+Dark mode aktif via Tailwind `class` strategy.
+Toggle dengan menambah/hapus class `.dark` di `<html>`:
+
+```ts
+document.documentElement.classList.toggle('dark')
+```
+
+---
+
 ## Deploy ke Vercel
 
 ```bash
-# Install Vercel CLI (jika belum):
 npm i -g vercel
-
-# Deploy:
 vercel
 ```
 
-Tambahkan environment variables di Vercel dashboard:
-- `DATABASE_URL` — connection string Neon
-- `VITE_APP_URL` — URL production app
+Set environment variables di Vercel dashboard:
+
+| Variable | Keterangan |
+|----------|------------|
+| `DATABASE_URL` | Connection string dari Neon |
+| `VITE_APP_URL` | URL production app |
+
+`vercel.json` sudah dikonfigurasi — Vite build untuk web, Edge Functions untuk `/api/*`.
+
+---
 
 ## Environment Variables
 
-Lihat `.env.example` untuk daftar lengkap.
+Lihat `.env.example` untuk template lengkap.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | Neon PostgreSQL connection string |
-| `NODE_ENV` | No | `development` / `production` (default: development) |
-| `VITE_APP_URL` | No | URL aplikasi (untuk CORS, dsb.) |
+| Variable | Required | Default | Keterangan |
+|----------|----------|---------|------------|
+| `DATABASE_URL` | ✅ | — | Neon PostgreSQL connection string |
+| `NODE_ENV` | — | `development` | Runtime environment |
+| `VITE_APP_URL` | — | — | URL app (opsional, untuk CORS dll.) |
 
-## License
+---
 
-MIT — by [NURHASAN](https://github.com/nurhasanfadillah)
+<div align="center">
+
+MIT © [NURHASAN](https://github.com/nurhasanfadillah)
+
+</div>
