@@ -50,6 +50,23 @@ react-edge-starter/
 
 ---
 
+## Cocok Untuk
+
+Template ini optimal untuk jenis web app berikut:
+
+| Jenis App | Mengapa Cocok |
+|-----------|---------------|
+| **SaaS / Dashboard** | TanStack Query + Drizzle siap untuk data-heavy UI; shadcn/ui menyediakan komponen table, dialog, form tanpa setup tambahan |
+| **Internal Tools / Admin Panel** | Monorepo memisahkan API dan UI dengan bersih; Hono Edge Function cepat untuk CRUD operations |
+| **Startup MVP** | Clone → isi `.env` → deploy Vercel dalam hitungan menit; semua tooling sudah terkonfigurasi |
+| **PWA (Progressive Web App)** | Service worker Workbox sudah aktif; manifest, icons, dan offline caching sudah pre-configured |
+| **Multi-team Project** | Arsitektur monorepo Turborepo memungkinkan tim berbeda mengerjakan `apps/` dan `packages/` secara paralel |
+| **Data-driven App** | Drizzle ORM + Neon PostgreSQL sudah terhubung; schema dan migration siap digunakan |
+
+> **Bukan untuk:** Static sites (overkill), aplikasi yang butuh SSR/SSG (tidak ada Next.js), atau app tanpa database (tapi bisa dikosongkan).
+
+---
+
 ## Quick Start
 
 ```bash
@@ -156,6 +173,19 @@ Lihat `.env.example` untuk template lengkap.
 | `DATABASE_URL` | ✅ | — | Neon PostgreSQL connection string |
 | `NODE_ENV` | — | `development` | Runtime environment |
 | `VITE_APP_URL` | — | — | URL app (opsional, untuk CORS dll.) |
+
+---
+
+## Referensi
+
+Dokumentasi lengkap tersedia di direktori `docs/` dan file-file berikut:
+
+| Dokumen | Isi |
+|---------|-----|
+| [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | Katalog 18 komponen UI yang sudah terinstall, daftar 29 komponen tambahan yang bisa diinstall, page blocks yang tersedia, dan panduan install komponen di monorepo (termasuk workaround) |
+| [`docs/CODEBASE.md`](docs/CODEBASE.md) | Peta codebase lengkap: struktur direktori, arsitektur layer, referensi file-by-file, key patterns, dan gotchas penting |
+| [`.env.example`](.env.example) | Template semua environment variables yang dibutuhkan — copy ke `.env` dan isi nilainya |
+| [`CLAUDE.md`](CLAUDE.md) | Konteks AI-friendly untuk Claude Code, Cursor, dan AI developer tools lainnya — berisi stack, conventions, common tasks, dan gotchas |
 
 ---
 
