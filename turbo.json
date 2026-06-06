@@ -1,0 +1,26 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDotEnv": [".env", ".env.local"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "format": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

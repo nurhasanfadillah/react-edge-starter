@@ -1,0 +1,21 @@
+{
+  "name": "react-edge-starter",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}

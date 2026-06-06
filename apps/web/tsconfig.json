@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@repo/config/typescript/react-app",
+  "include": ["src", "routeTree.gen.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@repo/ui/*": ["../../packages/ui/*"],
+      "@repo/ui/src/*": ["../../packages/ui/src/*"]
+    }
+  }
+}
