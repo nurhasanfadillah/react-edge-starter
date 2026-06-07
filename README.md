@@ -77,15 +77,32 @@ cd my-app
 # 2. Install
 pnpm install
 
-# 3. Setup env
+# 3. Setup — reset git, bersihkan file boilerplate, rename project
+pnpm setup
+
+# 4. Isi env
 cp .env.example .env
 # → isi DATABASE_URL dari https://console.neon.tech
 
-# 4. Dev
+# 5. Dev
 pnpm dev
 # apps/web  → http://localhost:5173
 # apps/api  → http://localhost:3000/api/health
 ```
+
+### Apa yang dilakukan `pnpm setup`?
+
+Script interaktif `scripts/setup.js` akan:
+
+| Langkah | Aksi |
+|---------|------|
+| Bersihkan internal | Hapus `.paul/`, `.spec-workflow/`, `.turbo/cache` |
+| Reset git | Hapus `.git/`, `git init`, buat commit pertama bersih |
+| Rename project | Update `name` di `package.json` sesuai input |
+| Remote (opsional) | `git remote add origin <url-kamu>` jika diisi |
+| Docs (opsional) | Tanya apakah folder `docs/` perlu dipertahankan |
+
+Setelah `pnpm setup` selesai, repo sudah bersih — tidak ada history dari boilerplate, tidak ada file internal, siap coding.
 
 ---
 
