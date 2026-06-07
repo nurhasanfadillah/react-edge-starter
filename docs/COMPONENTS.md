@@ -6,7 +6,8 @@ Reference untuk semua komponen UI yang tersedia di template ini.
 
 ## Included Components
 
-18 komponen sudah terinstall di `packages/ui` dan siap digunakan.
+> **40+ komponen sudah terinstall** di `packages/ui` dan siap digunakan via `import { ... } from '@repo/ui'`.
+> Lihat route `/ui` untuk preview visual semua komponen.
 
 ```ts
 import { ComponentName } from '@repo/ui'
@@ -14,23 +15,48 @@ import { ComponentName } from '@repo/ui'
 
 | Component | Import | Description |
 |-----------|--------|-------------|
+| Accordion | `Accordion, AccordionItem, AccordionTrigger, AccordionContent` | Collapsible sections |
+| Alert | `Alert, AlertTitle, AlertDescription` | Pesan callout informatif |
+| Alert Dialog | `AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel` | Konfirmasi dialog blocking |
 | Avatar | `Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarBadge` | Gambar profil dengan fallback dan varian grup |
 | Badge | `Badge, badgeVariants` | Label kecil untuk status, kategori, atau notifikasi |
+| Breadcrumb | `Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis` | Navigasi hierarki halaman |
 | Button | `Button, buttonVariants` | Tombol dengan berbagai varian dan ukuran |
+| Calendar | `Calendar, CalendarDayButton` | Pemilih tanggal (react-day-picker) |
 | Card | `Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent` | Container konten dengan header dan footer |
+| Chart | `ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle` | Recharts wrapper |
+| Checkbox | `Checkbox` | Checkbox input |
+| Collapsible | `Collapsible, CollapsibleTrigger, CollapsibleContent` | Panel expand/collapse |
+| Command | `Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandShortcut` | Command palette / search |
 | Dialog | `Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger` | Modal dialog |
-| Dropdown Menu | `DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuGroup, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup` | Menu dropdown dengan sub-menu dan aksi |
+| Drawer | `Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose` | Bottom drawer (mobile-friendly) |
+| Dropdown Menu | `DropdownMenu` + 14 sub-komponen | Menu dropdown dengan sub-menu dan aksi |
+| Field | `Field, FieldGroup, FieldLabel, FieldDescription, FieldSeparator, FieldError, FieldSet, FieldContent, FieldTitle` | Form field primitives |
 | Form | `Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField, useFormField` | Form dengan react-hook-form integration |
+| Hover Card | `HoverCard, HoverCardTrigger, HoverCardContent` | Preview card saat hover |
 | Input | `Input` | Text input field |
+| Input Group | `InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea` | Input dengan addon/icon |
+| Input OTP | `InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator` | OTP input dengan auto-advance |
 | Label | `Label` | Label aksesibel untuk form controls |
-| Popover | `Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverHeader, PopoverTitle, PopoverDescription` | Floating content yang muncul di atas elemen |
-| Select | `Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectLabel, SelectGroup, SelectSeparator, SelectScrollUpButton, SelectScrollDownButton` | Dropdown pilihan dengan search |
+| Navigation Menu | `NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, NavigationMenuLink, NavigationMenuViewport` | Navigation dengan dropdown |
+| Pagination | `Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis` | Navigasi halaman |
+| Popover | `Popover, PopoverTrigger, PopoverContent, PopoverAnchor` | Floating content yang muncul di atas elemen |
+| Progress | `Progress` | Progress bar |
+| Radio Group | `RadioGroup, RadioGroupItem` | Radio button group |
+| Scroll Area | `ScrollArea, ScrollBar` | Custom scrollbar |
+| Select | `Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectLabel, SelectGroup, SelectSeparator` | Dropdown pilihan |
 | Separator | `Separator` | Garis pemisah horizontal atau vertikal |
 | Sheet | `Sheet, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription` | Panel slide dari tepi layar |
+| Sidebar | `Sidebar, SidebarProvider, SidebarContent, SidebarHeader, SidebarFooter, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger` + 15 sub-komponen | Sidebar navigasi lengkap |
 | Skeleton | `Skeleton` | Placeholder loading state |
+| Slider | `Slider` | Range input slider |
 | Sonner | `Toaster` | Toast notifications |
+| Switch | `Switch` | Toggle switch |
+| Table | `Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableFooter, TableCaption` | Tabel data (padding px-4/py-3) |
 | Tabs | `Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants` | Navigasi tab dengan panels |
 | Textarea | `Textarea` | Multi-line text input |
+| Toggle | `Toggle, toggleVariants` | Tombol on/off |
+| Toggle Group | `ToggleGroup, ToggleGroupItem` | Grup toggle buttons |
 | Tooltip | `Tooltip, TooltipTrigger, TooltipContent, TooltipProvider` | Popup info saat hover |
 
 > Semua komponen menggunakan style **radix-vega** (preset `b1FjRZntw`) dengan Inter font dan oklch color tokens.
@@ -94,31 +120,32 @@ npx shadcn@latest add [component-name] --overwrite
 
 ---
 
-## Page Blocks
+## Installed Blocks
 
-Blocks adalah page-level templates siap pakai — layout lengkap yang langsung bisa digunakan sebagai titik awal halaman.
+4 blocks sudah terinstall di `apps/web/src/components/` dan tersedia sebagai routes:
 
-### Install
+| Block | Components | Route | Description |
+|-------|-----------|-------|-------------|
+| `dashboard-01` | `AppSidebar`, `SiteHeader`, `SectionCards`, `ChartAreaInteractive`, `DataTable`, `NavMain`, `NavDocuments`, `NavSecondary`, `NavUser`, `TeamSwitcher` | `/dashboard` | Layout dashboard dengan sidebar, header, dan area konten |
+| `sidebar-07` | Merged ke `dashboard-01` components | `/_authenticated` (layout) | Layout sidebar navigasi |
+| `login-02` | `LoginForm` | `/login` | Form login (UI demo, tanpa logika auth) |
+| `signup-02` | `SignupForm` | `/signup` | Form register (UI demo, tanpa logika auth) |
 
-Blocks diinstall langsung ke `apps/web` tanpa alias workaround:
+Route `/_authenticated` adalah **layout route** — semua halaman yang membutuhkan sidebar cukup dibuat di dalam:
+```
+apps/web/src/routes/_authenticated.my-page.tsx  →  /my-page (dengan sidebar)
+```
+
+## Page Blocks — Adding More
+
+Blocks tambahan bisa diinstall langsung ke `apps/web`:
 
 ```bash
 cd apps/web
 npx shadcn@latest add [block-name]
 ```
 
-Komponen akan muncul di `apps/web/src/components/[block-name]/`.
-
-### Available Blocks
-
-| Block | Install Command | Dependencies | Description |
-|-------|----------------|--------------|-------------|
-| `dashboard-01` | `npx shadcn@latest add dashboard-01` | sidebar | Layout dashboard dengan sidebar, header, dan area konten |
-| `login-02` | `npx shadcn@latest add login-02` | — | Halaman login dengan form email + password |
-| `signup-02` | `npx shadcn@latest add signup-02` | — | Halaman signup/register |
-| `sidebar-07` | `npx shadcn@latest add sidebar-07` | sidebar | Layout dengan sidebar navigasi |
-
-> **Catatan:** Block yang membutuhkan komponen `sidebar` — install komponen sidebar ke `packages/ui` dulu menggunakan instruksi di section sebelumnya, lalu install block-nya.
+> **Catatan:** Block yang membutuhkan komponen `sidebar` — sudah tersedia di `packages/ui`.
 
 ---
 

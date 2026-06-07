@@ -284,6 +284,9 @@ Lihat `docs/COMPONENTS.md` untuk daftar lengkap komponen yang tersedia.
 | `routeTree.gen.ts` outdated | Pastikan dev server (`pnpm dev`) berjalan agar file auto-update |
 | Env var tidak terbaca di frontend | Cek apakah sudah prefix `VITE_` dan ada di `src/lib/env.ts` |
 | `import.meta.env` tidak dikenali TypeScript | File `src/vite-env.d.ts` sudah ada dengan `/// <reference types="vite/client" />` — jangan dihapus |
+| Ubah `packages/ui` tapi browser tidak update | Vite cache stale — jalankan `pnpm dev:clean` untuk clear cache dan restart |
+| Tambah `pt-*` ke `CardContent` untuk kompensasi header | Salah — `Card` sudah punya `gap-(--card-spacing)`. Lihat section Component Contracts |
+| Wrap `Table` dengan `overflow-x-auto` lagi | Tidak perlu — `Table` sudah built-in overflow wrapper. Lihat section Component Contracts |
 
 ---
 
@@ -291,6 +294,7 @@ Lihat `docs/COMPONENTS.md` untuk daftar lengkap komponen yang tersedia.
 
 ```bash
 pnpm dev              # Jalankan semua apps (web + api) dengan Turborepo
+pnpm dev:clean        # Clear Vite cache + jalankan dev (pakai saat ubah packages/ui tidak ter-reflect)
 pnpm build            # Build semua packages dan apps
 pnpm lint             # ESLint semua packages
 pnpm typecheck        # tsc --noEmit semua packages
@@ -303,6 +307,185 @@ pnpm --filter @repo/db db:push       # Push schema ke DB (dev)
 pnpm --filter @repo/db db:studio     # Buka Drizzle Studio (GUI)
 pnpm --filter @repo/db db:migrate    # Jalankan migrations
 ```
+
+---
+
+## AI Agent Rules
+
+> Rules ini bersifat **wajib**, bukan saran. Boilerplate ini dibangun khusus untuk
+> pengembangan oleh AI agent — setiap keputusan UI harus mengikuti rules ini.
+
+### Rule 1 — Preset First
+**SELALU gunakan komponen dari `@repo/ui` sebelum membuat komponen custom.**
+Cek daftar di "Component Catalog" di bawah sebelum memutuskan membuat sesuatu dari nol.
+Pengecualian: user secara eksplisit meminta komponen custom.
+
+### Rule 2 — Preserve Preset Styling
+**JANGAN override CSS variable warna, spacing, atau typography preset `radix-vega`.**
+Boleh: tambah utility classes Tailwind untuk layout (flex, grid, gap, padding).
+Dilarang: ganti `--primary`, `--background`, `--radius`, atau token lain di CSS.
+Pengecualian: user secara eksplisit meminta ganti tema/warna.
+
+### Rule 3 — PageContent Wrapper
+**SELALU wrap konten halaman dengan `PageContent` dari `@/components/page-content`.**
+Jangan reinvent padding per-route. Gunakan:
+```tsx
+import { PageContent } from '@/components/page-content'
+
+function MyPage() {
+  return (
+    <PageContent>
+      {/* konten */}
+    </PageContent>
+  )
+}
+```
+
+### Rule 4 — Route Templates
+Template route siap kembangkan tersedia di `apps/web/src/routes/`:
+- `_authenticated.tsx` — layout sidebar + header (h-screen + min-h-0 pattern)
+- `_authenticated.dashboard.tsx` — halaman dashboard (referensi pola komponen)
+- `login.tsx` — form login (UI demo, tambahkan logika auth sendiri)
+- `signup.tsx` — form register (UI demo, tambahkan logika auth sendiri)
+
+Saat membuat halaman baru yang butuh sidebar, buat route nested di dalam `_authenticated`:
+file: `apps/web/src/routes/_authenticated.my-page.tsx`
+
+### Rule 5 — Component Import
+```ts
+// BENAR
+import { Button, Card, Switch } from '@repo/ui'
+
+// SALAH — import langsung dari source
+import { Button } from 'packages/ui/src/components/ui/button'
+import { Button } from '@repo/ui/src/components/ui/button'
+```
+
+---
+
+## Component Catalog
+
+Semua komponen tersedia via `import { ... } from '@repo/ui'`.
+Lihat route `/ui` untuk preview visual semua komponen.
+
+### Primitives
+`Button` `Input` `Label` `Textarea` `Badge` `Separator` `Skeleton`
+
+### Avatar
+`Avatar` `AvatarImage` `AvatarFallback` `AvatarGroup` `AvatarGroupCount` `AvatarBadge`
+
+### Form Controls
+`Checkbox` `Switch` `RadioGroup` `RadioGroupItem` `Slider`
+`Select` `SelectTrigger` `SelectValue` `SelectContent` `SelectItem` (+ more parts)
+`InputOTP` `InputOTPGroup` `InputOTPSlot` `InputOTPSeparator`
+`Form` `FormField` `FormItem` `FormLabel` `FormControl` `FormDescription` `FormMessage` (react-hook-form)
+`Field` `FieldGroup` `FieldLabel` `FieldDescription` `FieldSeparator` `FieldError` (+ more parts)
+`InputGroup` `InputGroupAddon` `InputGroupButton` `InputGroupText`
+
+### Layout & Containers
+`Card` `CardHeader` `CardContent` `CardFooter` `CardTitle` `CardDescription` `CardAction`
+`Tabs` `TabsList` `TabsTrigger` `TabsContent`
+`Accordion` `AccordionItem` `AccordionTrigger` `AccordionContent`
+`Collapsible` `CollapsibleTrigger` `CollapsibleContent`
+`ScrollArea` `ScrollBar`
+`Table` `TableHeader` `TableBody` `TableRow` `TableHead` `TableCell` `TableFooter` `TableCaption`
+
+### Navigation
+`Breadcrumb` `BreadcrumbList` `BreadcrumbItem` `BreadcrumbLink` `BreadcrumbPage` `BreadcrumbSeparator` `BreadcrumbEllipsis`
+`Pagination` `PaginationContent` `PaginationItem` `PaginationLink` `PaginationPrevious` `PaginationNext` `PaginationEllipsis`
+`NavigationMenu` `NavigationMenuList` `NavigationMenuItem` `NavigationMenuContent` `NavigationMenuTrigger` `NavigationMenuLink` `NavigationMenuViewport`
+`Sidebar` `SidebarProvider` `SidebarContent` `SidebarHeader` `SidebarFooter` `SidebarGroup` `SidebarMenu` `SidebarMenuItem` `SidebarMenuButton` `SidebarTrigger` (+ 15 sub-komponen lain)
+
+### Overlays & Popups
+`Dialog` `DialogTrigger` `DialogContent` `DialogHeader` `DialogTitle` `DialogDescription` `DialogFooter` `DialogClose`
+`Sheet` `SheetTrigger` `SheetContent` `SheetHeader` `SheetTitle` `SheetDescription` `SheetFooter`
+`Popover` `PopoverTrigger` `PopoverContent`
+`Tooltip` `TooltipProvider` `TooltipTrigger` `TooltipContent`
+`AlertDialog` `AlertDialogTrigger` `AlertDialogContent` `AlertDialogHeader` `AlertDialogTitle` `AlertDialogDescription` `AlertDialogAction` `AlertDialogCancel`
+`Drawer` `DrawerTrigger` `DrawerContent` `DrawerHeader` `DrawerTitle` `DrawerDescription` `DrawerFooter` `DrawerClose`
+`HoverCard` `HoverCardTrigger` `HoverCardContent`
+`Command` `CommandInput` `CommandList` `CommandEmpty` `CommandGroup` `CommandItem` `CommandSeparator`
+
+### Feedback
+`Alert` `AlertTitle` `AlertDescription`
+`Progress`
+`Toaster` (Sonner)
+
+### Actions & Menus
+`DropdownMenu` `DropdownMenuTrigger` `DropdownMenuContent` `DropdownMenuItem` `DropdownMenuSeparator` (+ more parts)
+`Toggle` `toggleVariants` `ToggleGroup` `ToggleGroupItem`
+
+### Data Visualization
+`ChartContainer` `ChartTooltip` `ChartTooltipContent` `ChartLegend` `ChartLegendContent` `ChartStyle` (Recharts wrapper)
+`Calendar` `CalendarDayButton` (react-day-picker)
+
+---
+
+## Component Contracts
+
+> Komponen di `packages/ui` ini **berbeda dari upstream shadcn/ui**. Jangan asumsi perilaku shadcn standar.
+
+### Card — Spacing Model
+
+Card menggunakan CSS variable `--card-spacing` (default `1.5rem`/6, `size="sm"` → `1rem`/4).
+
+| Slot | Spacing yang diterapkan |
+|------|------------------------|
+| `Card` | `py-(--card-spacing)` + `gap-(--card-spacing)` antar children |
+| `CardHeader` | `px-(--card-spacing)` saja |
+| `CardContent` | `px-(--card-spacing)` saja |
+| `CardFooter` | `px-(--card-spacing)` saja |
+
+**Jangan tambah `pt-*` ke `CardContent`** — gap vertikal sudah dikelola oleh `Card` via `gap-(--card-spacing)`.
+
+Untuk table atau konten flush-edge: `<CardContent className="p-0">`.
+
+### Table — Overflow Built-In
+
+`Table` sudah memiliki wrapper `<div className="relative w-full overflow-x-auto">` di dalamnya.
+
+**Jangan tambah `overflow-x-auto` lagi** di luar `Table`. Gunakan langsung:
+```tsx
+<CardContent className="p-0">
+  <Table>...</Table>
+</CardContent>
+```
+
+### Sidebar Layout Pattern
+
+Untuk layout dengan sidebar, **wajib** pakai `h-screen` (bukan `min-h-screen`) di container root, dan `min-h-0` di `<main>`:
+
+```tsx
+// apps/web/src/routes/_authenticated.tsx (atau layout serupa)
+<div className="flex h-screen bg-background">
+  <aside className="...">...</aside>
+  {/* min-h-0 wajib — tanpanya flex item tidak bisa shrink dan overflow tidak aktif */}
+  <main className="flex min-h-0 flex-1 flex-col overflow-auto">
+    <Outlet />
+  </main>
+</div>
+```
+
+`min-h-screen` membuat container tumbuh melebihi viewport sehingga `overflow-auto` di `main` tidak pernah aktif.
+
+### PageContent — Standard Page Wrapper
+
+Gunakan `PageContent` dari `apps/web/src/components/page-content.tsx` sebagai wrapper konten halaman:
+
+```tsx
+import { PageContent } from '@/components/page-content'
+
+function MyPage() {
+  return (
+    <PageContent>
+      <h1>Judul</h1>
+      {/* konten halaman */}
+    </PageContent>
+  )
+}
+```
+
+Class yang diterapkan: `px-4 py-4 md:py-6 lg:px-6 space-y-6 flex flex-col flex-1`. Jangan reinvent padding per-route.
 
 ---
 

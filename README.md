@@ -204,7 +204,7 @@ Dokumentasi lengkap tersedia di direktori `docs/` dan file-file berikut:
 
 | Dokumen | Isi |
 |---------|-----|
-| [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | Katalog 18 komponen UI yang sudah terinstall, daftar 29 komponen tambahan yang bisa diinstall, page blocks yang tersedia, dan panduan install komponen di monorepo (termasuk workaround) |
+| [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | Katalog 40+ komponen UI yang sudah terinstall, 4 page blocks siap pakai (dashboard, sidebar, login, signup), dan panduan install komponen di monorepo. Lihat route `/ui` untuk preview visual. |
 | [`docs/CODEBASE.md`](docs/CODEBASE.md) | Peta codebase lengkap: struktur direktori, arsitektur layer, referensi file-by-file, key patterns, dan gotchas penting |
 | [`.env.example`](.env.example) | Template semua environment variables yang dibutuhkan — copy ke `.env` dan isi nilainya |
 | [`CLAUDE.md`](CLAUDE.md) | Konteks AI-friendly untuk Claude Code, Cursor, dan AI developer tools lainnya — berisi stack, conventions, common tasks, dan gotchas |
