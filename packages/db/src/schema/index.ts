@@ -1,9 +1,12 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
-export const users = pgTable('users', {
+export const todos = pgTable('todos', {
   id: uuid('id').primaryKey().defaultRandom(),
-  email: text('email').notNull().unique(),
-  name: text('name'),
+  title: text('title').notNull(),
+  completed: boolean('completed').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 })
+
+export type Todo = typeof todos.$inferSelect
+export type NewTodo = typeof todos.$inferInsert

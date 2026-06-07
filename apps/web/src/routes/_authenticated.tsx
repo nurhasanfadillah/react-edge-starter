@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { SidebarProvider } from '@repo/ui/src/components/ui/sidebar'
+import { SidebarProvider } from '@repo/ui'
 import { AppSidebar } from '@/components/app-sidebar'
 
 export const Route = createFileRoute('/_authenticated')({

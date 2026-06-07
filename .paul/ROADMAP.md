@@ -254,6 +254,33 @@ Goals achieved: 40+ komponen di packages/ui, 4 blocks sebagai routes, /ui showca
 
 ---
 
+## Milestone v1.8 — Boilerplate Fixes
+Status: ✅ COMPLETE
+Completed: 2026-06-07
+Phases: 1 of 1 complete
+
+Focus: Perbaiki bug kritis dan high-priority yang ditemukan saat uji coba boilerplate di proyek nyata — dark mode DOM sync, import path, schema konflik auth, drizzle non-TTY, CORS, error handler.
+
+| Phase | Name | Plans | Status |
+|-------|------|-------|--------|
+| 11 | Boilerplate Fixes | 11-01, 11-02, 11-03 | ✅ Complete |
+
+---
+
+### Phase 11: Boilerplate Fixes ✅ COMPLETE
+Completed: 2026-06-07
+Plans: 3/3 complete
+
+Goals achieved: 8 issues dari REKOMENDASI.md (🔴🟠) terselesaikan — frontend bugs, database schema, API layer.
+
+| Plan | Name | Status |
+|------|------|--------|
+| 11-01 | Frontend Critical Bug Fixes | ✅ Complete |
+| 11-02 | Database & Schema Improvements | ✅ Complete |
+| 11-03 | API Layer + DX Improvements | ✅ Complete |
+
+---
+
 ## Phase 06 — Docs & AI Context
 Status: COMPLETE ✓
 Priority: 1
