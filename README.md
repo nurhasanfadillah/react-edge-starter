@@ -2,7 +2,9 @@
 
 
 
-# REACT EDGE STARTER bu NURHASAN
+# REACT EDGE STARTER by NURHASAN
+
+
 
 
 **Production-ready React monorepo boilerplate.**
