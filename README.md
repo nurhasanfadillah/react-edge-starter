@@ -44,9 +44,10 @@ react-edge-starter/
 │   └── api/                  # Hono API (Vercel Edge)
 │       └── api/[[...route]].ts  # catch-all edge function
 ├── packages/
-│   ├── ui/                   # shadcn/ui components
+│   ├── ui/                   # shadcn/ui components (40+)
 │   ├── db/                   # Drizzle schema + client
 │   ├── env/                  # T3 Env + Zod schemas
+│   ├── auth/                 # Better Auth (opt-in)
 │   └── config/               # ESLint · Prettier · TypeScript
 ├── .env.example
 ├── turbo.json
@@ -92,7 +93,7 @@ cp .env.example .env
 # 5. Dev
 pnpm dev
 # apps/web  → http://localhost:5173
-# apps/api  → http://localhost:3000/api/health
+# apps/api  → http://localhost:3001/api/health
 ```
 
 ### Apa yang dilakukan `pnpm run setup`?
@@ -211,6 +212,7 @@ Dokumentasi lengkap tersedia di direktori `docs/` dan file-file berikut:
 |---------|-----|
 | [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | Katalog 40+ komponen UI yang sudah terinstall, 4 page blocks siap pakai (dashboard, sidebar, login, signup), dan panduan install komponen di monorepo. Lihat route `/ui` untuk preview visual. |
 | [`docs/CODEBASE.md`](docs/CODEBASE.md) | Peta codebase lengkap: struktur direktori, arsitektur layer, referensi file-by-file, key patterns, dan gotchas penting |
+| [`docs/AUTH.md`](docs/AUTH.md) | Panduan setup Better Auth (opt-in) — langkah-langkah mengaktifkan authentication dengan Drizzle adapter |
 | [`.env.example`](.env.example) | Template semua environment variables yang dibutuhkan — copy ke `.env` dan isi nilainya |
 | [`CLAUDE.md`](CLAUDE.md) | Konteks AI-friendly untuk Claude Code, Cursor, dan AI developer tools lainnya — berisi stack, conventions, common tasks, dan gotchas |
 

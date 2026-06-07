@@ -14,13 +14,27 @@ react-edge-starter/
 │   │   ├── src/
 │   │   │   ├── routes/               # File-based routing (TanStack Router)
 │   │   │   │   ├── __root.tsx        # Root layout — providers, devtools
-│   │   │   │   └── index.tsx         # Route "/" — halaman utama
+│   │   │   │   ├── index.tsx         # Route "/" — halaman utama
+│   │   │   │   ├── _authenticated.tsx        # Layout sidebar + header
+│   │   │   │   ├── _authenticated.dashboard.tsx  # Route "/dashboard"
+│   │   │   │   ├── login.tsx         # Route "/login" (UI demo)
+│   │   │   │   ├── signup.tsx        # Route "/signup" (UI demo)
+│   │   │   │   └── ui.tsx            # Route "/ui" — component showcase
+│   │   │   ├── components/           # App-specific components
+│   │   │   │   ├── app-sidebar.tsx   # Sidebar navigasi utama
+│   │   │   │   ├── site-header.tsx   # Header dengan breadcrumb
+│   │   │   │   ├── data-table.tsx    # Tabel dengan sorting/filtering
+│   │   │   │   ├── login-form.tsx    # Form login (UI only)
+│   │   │   │   ├── signup-form.tsx   # Form register (UI only)
+│   │   │   │   ├── page-content.tsx  # Wrapper padding standar halaman
+│   │   │   │   └── ...               # chart-area-interactive, section-cards, dll.
+│   │   │   ├── hooks/
+│   │   │   │   └── use-mobile.ts     # Deteksi breakpoint mobile (768px)
 │   │   │   ├── stores/
 │   │   │   │   └── app.ts            # Zustand store — theme dan global state
 │   │   │   ├── lib/
 │   │   │   │   ├── env.ts            # Client-side env vars (Vite/VITE_*)
-│   │   │   │   ├── query.ts          # QueryClient instance (TanStack Query)
-│   │   │   │   └── utils.ts          # Helper utilities
+│   │   │   │   └── query.ts          # QueryClient instance (TanStack Query)
 │   │   │   ├── main.tsx              # Entry point — providers + RouterProvider
 │   │   │   ├── router.tsx            # Router factory (injects queryClient context)
 │   │   │   ├── routeTree.gen.ts      # AUTO-GENERATED — jangan edit manual
@@ -40,7 +54,8 @@ react-edge-starter/
 │   │
 │   └── api/                          # Hono.js API (Vercel Edge Functions)
 │       ├── src/
-│       │   └── index.ts              # Semua route Hono — tambah endpoint di sini
+│       │   ├── index.ts              # Semua route Hono — tambah endpoint di sini
+│       │   └── dev.ts                # Dev server (tsx watch, port 3001)
 │       ├── api/
 │       │   └── [[...route]].ts       # Vercel catch-all edge function adapter
 │       ├── package.json
@@ -49,11 +64,20 @@ react-edge-starter/
 ├── packages/
 │   ├── ui/                           # Shared UI library (shadcn/ui components)
 │   │   ├── src/
-│   │   │   ├── components/ui/        # 18 komponen shadcn (auto-generated + manual)
+│   │   │   ├── components/ui/        # 40+ komponen shadcn
+│   │   │   ├── hooks/                # Radix UI hooks (re-exported)
 │   │   │   ├── lib/
 │   │   │   │   └── utils.ts          # cn() utility function
 │   │   │   └── index.ts              # Barrel exports — semua komponen diekspor dari sini
+│   │   ├── styles.css                # Tailwind CSS + component styles
 │   │   ├── components.json           # shadcn config untuk packages/ui
+│   │   └── package.json
+│   │
+│   ├── auth/                         # Authentication — Better Auth (opt-in)
+│   │   ├── src/
+│   │   │   ├── server.ts             # Server-side auth setup (Hono middleware)
+│   │   │   ├── client.ts             # Client-side auth client
+│   │   │   └── schema.ts             # Drizzle schema (users, sessions, accounts)
 │   │   └── package.json
 │   │
 │   ├── db/                           # Database layer (Drizzle ORM + Neon)
@@ -137,6 +161,11 @@ Shared packages (digunakan oleh semua apps):
 │  shadcn components  │  T3 Env + Zod   │  │ ESLint/Prettier │
 │  → apps/web     │  │ → apps/web +api │  │ → semua packages│
 └─────────────────┘  └─────────────────┘  └─────────────────┘
+
+┌─────────────────┐
+│  packages/auth  │  Better Auth (opt-in — tidak aktif default)
+│  server+client  │  → apps/api + apps/web (saat diaktifkan)
+└─────────────────┘
 ```
 
 ### Build Pipeline (Turborepo)
@@ -159,7 +188,13 @@ packages/config  ──▶  packages/ui, packages/db, packages/env
 |------|-------------|
 | `src/routes/__root.tsx` | Tambah global providers, layout wrapper, atau komponen yang muncul di semua halaman (navbar, footer) |
 | `src/routes/index.tsx` | Edit halaman utama `/` |
+| `src/routes/_authenticated.tsx` | Layout sidebar + header — gunakan sebagai base untuk halaman yang perlu sidebar |
+| `src/routes/_authenticated.dashboard.tsx` | Halaman `/dashboard` — gunakan sebagai referensi pola komponen |
+| `src/routes/login.tsx` | Halaman `/login` — UI demo, tambahkan logika auth sendiri |
+| `src/routes/signup.tsx` | Halaman `/signup` — UI demo, tambahkan logika auth sendiri |
+| `src/routes/ui.tsx` | Halaman `/ui` — showcase visual semua komponen @repo/ui |
 | `src/routes/[nama].tsx` | Buat file baru untuk tambah route baru (penamaan file = URL path) |
+| `src/components/page-content.tsx` | **Gunakan sebagai wrapper** semua halaman — sudah include padding standar |
 | `src/stores/app.ts` | Tambah global client state (theme, user preference, dsb.) |
 | `src/lib/env.ts` | Tambah environment variable baru yang perlu diakses di frontend (harus prefix `VITE_`) |
 | `src/lib/query.ts` | Ubah konfigurasi TanStack Query (staleTime, retry, dll.) |
@@ -320,7 +355,7 @@ app.post('/users', async (c) => {
 | `form.tsx` ditulis manual | shadcn CLI hang di Windows saat install via stdin pipe | Jangan replace via CLI — sudah ada dan berfungsi |
 | `routeTree.gen.ts` | File ini auto-generated saat dev server berjalan | Jangan commit perubahan manual, jangan edit |
 | Env vars di frontend | Vite hanya expose variabel dengan prefix `VITE_` | Semua frontend env var harus prefix `VITE_` |
-| `turbo.json` warning | Key `globalDotEnv` deprecated di Turborepo 2.x | Warning minor — tidak mempengaruhi fungsi, bisa diupdate saat ada breaking change |
+| `packages/auth` schema konflik | `packages/db` punya contoh `users` table, `packages/auth` juga punya | Hapus contoh `users` di `packages/db/src/schema/index.ts` sebelum aktifkan auth (lihat docs/AUTH.md) |
 
 ### Keputusan Arsitektur
 
