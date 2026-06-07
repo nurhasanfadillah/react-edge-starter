@@ -69,5 +69,5 @@ Resume file: .paul/ROADMAP.md
 
 ### Git State
 
-Last commit: dd86721 — feat(10-v1.7): UI component library — 40+ components, blocks, showcase
+Last commit: f3e7f59 — feat(11-v1.8): boilerplate fixes — dark mode, schema, CORS, DX
 Branch: master
