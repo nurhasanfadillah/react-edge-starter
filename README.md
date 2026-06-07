@@ -1,6 +1,9 @@
 <div align="center">
 
-# react-edge-starter
+
+
+# REACT EDGE STARTER bu NURHASAN
+
 
 **Production-ready React monorepo boilerplate.**
 Clone → isi `.env` → `pnpm dev` → langsung coding fitur bisnis.
