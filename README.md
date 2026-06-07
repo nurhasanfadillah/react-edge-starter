@@ -78,7 +78,7 @@ cd my-app
 pnpm install
 
 # 3. Setup — reset git, bersihkan file boilerplate, rename project
-pnpm setup
+pnpm run setup
 
 # 4. Isi env
 cp .env.example .env
@@ -90,7 +90,7 @@ pnpm dev
 # apps/api  → http://localhost:3000/api/health
 ```
 
-### Apa yang dilakukan `pnpm setup`?
+### Apa yang dilakukan `pnpm run setup`?
 
 Script interaktif `scripts/setup.js` akan:
 
@@ -102,7 +102,7 @@ Script interaktif `scripts/setup.js` akan:
 | Remote (opsional) | `git remote add origin <url-kamu>` jika diisi |
 | Docs (opsional) | Tanya apakah folder `docs/` perlu dipertahankan |
 
-Setelah `pnpm setup` selesai, repo sudah bersih — tidak ada history dari boilerplate, tidak ada file internal, siap coding.
+Setelah `pnpm run setup` selesai, repo sudah bersih — tidak ada history dari boilerplate, tidak ada file internal, siap coding.
 
 ---
 
