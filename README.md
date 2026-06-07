@@ -93,19 +93,24 @@ pnpm dev
 
 ### Menambah shadcn Component
 
+Monorepo membutuhkan workaround — install dari `apps/web`, bukan dari root:
+
 ```bash
-# Dari root monorepo
+# Jalankan dari apps/web (PENTING: bukan dari root)
+cd apps/web
 npx shadcn add card
 npx shadcn add input
 npx shadcn add dialog
 ```
 
 Komponen masuk ke `packages/ui/src/components/ui/`.
-Export di `packages/ui/src/index.ts`, lalu pakai di apps/web:
+Tambahkan export di `packages/ui/src/index.ts`, lalu pakai di apps/web:
 
 ```tsx
 import { Button, Card } from '@repo/ui'
 ```
+
+Lihat [`docs/COMPONENTS.md`](docs/COMPONENTS.md) untuk panduan lengkap dan daftar komponen yang tersedia.
 
 ### Menambah API Route
 
