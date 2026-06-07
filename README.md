@@ -140,10 +140,10 @@ Lihat [`docs/COMPONENTS.md`](docs/COMPONENTS.md) untuk panduan lengkap dan dafta
 Edit `apps/api/src/index.ts`:
 
 ```ts
-import { db, users } from '@repo/db'
+import { db, todos } from '@repo/db'
 
-app.get('/users', async (c) => {
-  const result = await db.select().from(users)
+app.get('/todos', async (c) => {
+  const result = await db.select().from(todos)
   return c.json(result)
 })
 ```
@@ -157,19 +157,27 @@ pnpm --filter @repo/db db:generate
 # Push ke database (dev, tanpa migration file)
 pnpm --filter @repo/db db:push
 
+# Jalankan migrations (non-interactive, cocok untuk CI)
+pnpm --filter @repo/db db:migrate
+
 # GUI Drizzle Studio
 pnpm --filter @repo/db db:studio
 ```
 
-Schema ada di `packages/db/src/schema/index.ts` — tambah tabel di sini.
+Schema ada di `packages/db/src/schema/index.ts` — tambah tabel di sini.  
+Contoh tabel: `todos` (sudah ada). Ganti atau tambah tabel sesuai kebutuhan proyek.
 
 ### Dark Mode
 
-Dark mode aktif via Tailwind `class` strategy.
-Toggle dengan menambah/hapus class `.dark` di `<html>`:
+Dark mode aktif via Tailwind `class` strategy. State tersimpan di Zustand store (`stores/app.ts`) dan otomatis di-sync ke DOM oleh `ThemeProvider` di `__root.tsx`.
+
+Toggle via store:
 
 ```ts
-document.documentElement.classList.toggle('dark')
+const { setTheme } = useAppStore()
+setTheme('dark')   // force dark
+setTheme('light')  // force light
+setTheme('system') // ikuti preferensi OS
 ```
 
 ---

@@ -217,9 +217,10 @@ packages/config  ──▶  packages/ui, packages/db, packages/env
 
 | File | Kapan Diedit |
 |------|-------------|
-| `src/schema/index.ts` | **Tambah tabel baru di sini** — define pgTable, kolom, relasi |
+| `src/schema/index.ts` | **Tambah tabel baru di sini** — define pgTable, kolom, relasi. Contoh: `todos` |
 | `src/index.ts` | Jarang diubah — hanya jika perlu konfigurasi Drizzle client berbeda |
-| `drizzle.config.ts` | Ubah output directory atau dialect jika pindah DB — biasanya tidak perlu |
+| `src/migrate.ts` | Programmatic migration runner — gunakan `db:migrate` untuk CI dan non-TTY environment |
+| `drizzle.config.ts` | Includes `tablesFilter` (exclude tabel auth) + dotenv dari root monorepo |
 
 ### packages/env
 
@@ -274,7 +275,7 @@ src/routes/
 import { Button, Card, Input } from '@repo/ui'
 
 // Database
-import { db, users } from '@repo/db'
+import { db, todos } from '@repo/db'
 
 // Environment validation
 import { env } from '@repo/env'
@@ -328,19 +329,21 @@ export const useMyStore = create<MyStore>()(
 
 ```ts
 // apps/api/src/index.ts
-import { db, users } from '@repo/db'
+import { db, todos } from '@repo/db'
 
-app.get('/users', async (c) => {
-  const result = await db.select().from(users)
+app.get('/todos', async (c) => {
+  const result = await db.select().from(todos)
   return c.json(result)
 })
 
-app.post('/users', async (c) => {
+app.post('/todos', async (c) => {
   const body = await c.req.json()
   // ... insert ke DB
   return c.json({ success: true }, 201)
 })
 ```
+
+CORS, logger, dan error handler sudah aktif secara default di `apps/api/src/index.ts`.
 
 ---
 
@@ -355,7 +358,7 @@ app.post('/users', async (c) => {
 | `form.tsx` ditulis manual | shadcn CLI hang di Windows saat install via stdin pipe | Jangan replace via CLI — sudah ada dan berfungsi |
 | `routeTree.gen.ts` | File ini auto-generated saat dev server berjalan | Jangan commit perubahan manual, jangan edit |
 | Env vars di frontend | Vite hanya expose variabel dengan prefix `VITE_` | Semua frontend env var harus prefix `VITE_` |
-| `packages/auth` schema konflik | `packages/db` punya contoh `users` table, `packages/auth` juga punya | Hapus contoh `users` di `packages/db/src/schema/index.ts` sebelum aktifkan auth (lihat docs/AUTH.md) |
+| `db:push` di CI / Claude Code | `drizzle-kit push` membutuhkan TTY interaktif | Gunakan `db:migrate` (`tsx src/migrate.ts`) — non-interactive, aman untuk semua environment |
 
 ### Keputusan Arsitektur
 

@@ -32,7 +32,7 @@ import { Button, Card, Input, Dialog, Form } from '@repo/ui'
 import { cn } from '@repo/ui/src/lib/utils'
 
 // Database client + schema
-import { db, users } from '@repo/db'
+import { db, todos } from '@repo/db'
 
 // Env validation (server-side, di apps/api)
 import { env } from '@repo/env'
@@ -90,13 +90,15 @@ function Dashboard() {
 
 Edit `apps/api/src/index.ts`:
 ```ts
-import { db, users } from '@repo/db'
+import { db, todos } from '@repo/db'
 
-app.get('/users', async (c) => {
-  const result = await db.select().from(users)
+app.get('/todos', async (c) => {
+  const result = await db.select().from(todos)
   return c.json(result)
 })
 ```
+
+CORS, logger middleware, dan global error handler sudah aktif by default.
 
 ### Tambah tabel database
 
@@ -125,13 +127,16 @@ Singkatnya: run install dari `apps/web` dengan redirect alias sementara.
 
 ### Toggle dark mode
 
+Dark mode dikelola via Zustand store — `ThemeProvider` di `__root.tsx` otomatis sync ke DOM:
+
 ```ts
-document.documentElement.classList.toggle('dark')
-// atau set explicit:
-document.documentElement.classList.add('dark')
-document.documentElement.classList.remove('dark')
+const { setTheme } = useAppStore()
+setTheme('dark')    // force dark
+setTheme('light')   // force light
+setTheme('system')  // ikuti preferensi OS (reaktif via matchMedia)
 ```
-Persisted via Zustand store di `apps/web/src/stores/app.ts`.
+
+Jangan manipulasi `document.documentElement.classList` secara langsung — state tidak akan tersimpan. Selalu gunakan `setTheme`.
 
 ---
 
@@ -173,7 +178,7 @@ export const products = pgTable('products', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 ```
-Lalu: `pnpm --filter @repo/db db:push`
+Lalu push ke DB: `pnpm --filter @repo/db db:push` (dev) atau `pnpm --filter @repo/db db:migrate` (CI/non-TTY)
 
 **Step 2 — API Endpoint:**
 ```ts
@@ -287,6 +292,9 @@ Lihat `docs/COMPONENTS.md` untuk daftar lengkap komponen yang tersedia.
 | Ubah `packages/ui` tapi browser tidak update | Vite cache stale — jalankan `pnpm dev:clean` untuk clear cache dan restart |
 | Tambah `pt-*` ke `CardContent` untuk kompensasi header | Salah — `Card` sudah punya `gap-(--card-spacing)`. Lihat section Component Contracts |
 | Wrap `Table` dengan `overflow-x-auto` lagi | Tidak perlu — `Table` sudah built-in overflow wrapper. Lihat section Component Contracts |
+| Toggle dark mode via `classList.toggle('dark')` langsung | State tidak tersimpan — gunakan `useAppStore().setTheme(...)` agar sync ke Zustand + DOM |
+| `db:push` gagal / minta TTY saat ada tabel auth | Gunakan `db:migrate` (`tsx src/migrate.ts`) — non-interactive, aman untuk Claude Code dan CI |
+| Import komponen dari `@repo/ui/src/components/ui/*` | Melanggar contract — selalu import dari barrel export `@repo/ui` |
 
 ---
 
@@ -303,9 +311,9 @@ pnpm test             # Vitest di semua packages
 
 # Database (jalankan dari root atau --filter)
 pnpm --filter @repo/db db:generate   # Generate migration dari schema
-pnpm --filter @repo/db db:push       # Push schema ke DB (dev)
+pnpm --filter @repo/db db:push       # Push schema ke DB (dev, butuh TTY interaktif)
+pnpm --filter @repo/db db:migrate    # Jalankan migrations (non-TTY safe, gunakan ini di CI)
 pnpm --filter @repo/db db:studio     # Buka Drizzle Studio (GUI)
-pnpm --filter @repo/db db:migrate    # Jalankan migrations
 ```
 
 ---
